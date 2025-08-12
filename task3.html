@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Logistic Regression — What, Why, When & How</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg1: #fff3e6; /* warm light cream */
+      --bg2: #fbe4d0; /* soft peach */
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --text: #4b2e2e; /* warm dark brown */
+      --muted: #7b5c5c; /* soft warm gray-brown */
+      --accent: #d65a31; /* terracotta / deep coral */
+      --code-bg: #f8efe4; /* light tan for code */
+      --shadow: 0 8px 20px rgba(150, 90, 50, 0.15);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color: var(--text);
+      padding: 28px;
+    }
+    .container {
+      max-width: 980px;
+      margin: auto;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    header p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 600px;
+    }
+    .badge {
+      background: rgba(214, 90, 49, 0.12);
+      color: var(--accent);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 18px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(150, 90, 50, 0.25);
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+    h3 {
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    ul {
+      color: var(--muted);
+      padding-left: 1.1rem;
+      margin-top: 6px;
+    }
+    ol {
+      padding-left: 1.2rem;
+      margin-top: 6px;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    @media(min-width: 820px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    code {
+      font-family: 'Fira Code', monospace;
+      background: var(--code-bg);
+      color: #5c3a2f;
+      padding: 4px 6px;
+      border-radius: 6px;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      font-family: 'Fira Code', monospace;
+      color: #5c3a2f;
+      box-shadow: inset 0 0 8px rgba(150, 90, 50, 0.1);
+    }
+    .example {
+      background: rgba(214, 90, 49, 0.08);
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 4px;
+    }
+    details {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.3);
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    footer {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 24px;
+      text-align: center;
+    }
+    .step {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Logistic Regression — What, Why, When & How</h1>
+        <p>Compact, practical guide with intuition, math, examples and a simple implementation snippet.</p>
+      </div>
+      <div style="margin-left:auto"><span class="badge">Super concise</span></div>
+    </header>
+
+    <article class="card">
+      <h2>What is Logistic Regression?</h2>
+      <p>Logistic regression is a statistical classification method that estimates the probability that a given input belongs to a particular class. Despite its name, it's used for classification (binary or categorical) rather than regression of continuous values.</p>
+      <div class="grid">
+        <div>
+          <h3>Key idea</h3>
+          <ul>
+            <li>Model output: probability between 0 and 1 using <strong>sigmoid</strong> function.</li>
+            <li>Decision: threshold (commonly 0.5) maps probability to class.</li>
+            <li>Parameters learned via likelihood maximization or log-loss minimization.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>One-line formula</h3>
+          <p class="example"><strong>p =</strong> <code>1 / (1 + e^{-(w·x + b)})</code></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2>Why use Logistic Regression?</h2>
+      <ul>
+        <li><strong>Simple & interpretable:</strong> coefficients show effect direction & strength.</li>
+        <li><strong>Fast & robust:</strong> works well on small to medium datasets.</li>
+        <li><strong>Probabilistic output:</strong> helpful for decision thresholds.</li>
+        <li>Works when log-odds relationship is approximately linear.</li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <h2>When to use Logistic Regression?</h2>
+      <ul>
+        <li>Binary classification problems.</li>
+        <li>Multiclass via one-vs-rest or multinomial.</li>
+        <li>When interpretability & fast prototyping are needed.</li>
+        <li>As a baseline before complex models.</li>
+      </ul>
+      <details>
+        <summary>When <em>not</em> to use</summary>
+        <ul>
+          <li>Highly non-linear boundaries.</li>
+          <li>Severe multicollinearity.</li>
+          <li>Complex feature interactions without engineering.</li>
+        </ul>
+      </details>
+    </article>
+
+    <article class="card">
+      <h2>How does it work? (Practical steps)</h2>
+      <ol>
+        <li class="step"><strong>1. Choose features</strong> — numeric/encoded categorical, normalize for optimization.</li>
+        <li class="step"><strong>2. Model</strong> — compute <code>z = w·x + b</code>, apply sigmoid.</li>
+        <li class="step"><strong>3. Loss</strong> — binary cross-entropy: <code>-[y log p + (1-y) log(1-p)]</code>.</li>
+        <li class="step"><strong>4. Optimize</strong> — gradient descent/L-BFGS with optional regularization.</li>
+        <li class="step"><strong>5. Evaluate</strong> — threshold & measure accuracy, precision/recall, AUC, etc.</li>
+      </ol>
+    </article>
+
+    <article class="card">
+      <h2>Quick implementation (Python)</h2>
+      <pre><code>from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, roc_auc_score
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+preds = model.predict(X_test)
+probs = model.predict_proba(X_test)[:,1]
+
+print(classification_report(y_test, preds))
+print("AUC:", roc_auc_score(y_test, probs))</code></pre>
+    </article>
+
+    <footer>
+      <small>Created for learning — Save as HTML & open in browser.</small>
+    </footer>
+  </div>
+</body>
+</html>
